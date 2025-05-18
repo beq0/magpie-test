@@ -1,9 +1,9 @@
 export class PoolDetailsDto {
-  id: number;
-  tickIds: string[];
+  id: string;
   token0Id: string;
   token1Id: string;
-  feeTier: number;
-  sqrtPrice: number;
-  liquidity: number;
+  feeTier: string;
+  sqrtPrice: string;
+  liquidity: string;
+  createdAtTimestamp: string;
 }

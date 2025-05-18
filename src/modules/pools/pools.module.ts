@@ -4,6 +4,7 @@ import { ApiModule } from '../api/api.module';
 import { PoolsApiUniswapService } from './pools-api/pools-api-uniswap.service';
 import { PoolsApiEtherService } from './pools-api/pools-api-ether.service';
 import { POOLS_API } from './pools-api/pools-api-provider.token';
+import {PoolsApiUniswapNormalizer} from "./pools-api/pools-api-uniswap.normalizer";
 
 @Module({
   imports: [ApiModule],
@@ -11,6 +12,7 @@ import { POOLS_API } from './pools-api/pools-api-provider.token';
     PoolsService,
     PoolsApiUniswapService,
     PoolsApiEtherService,
+      PoolsApiUniswapNormalizer,
     {
       provide: POOLS_API,
       useClass:

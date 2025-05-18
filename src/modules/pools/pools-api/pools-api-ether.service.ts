@@ -5,7 +5,7 @@ import { PoolsApiService } from './pools-api.service.interface';
 
 @Injectable()
 export class PoolsApiEtherService implements PoolsApiService {
-  public async getPools(): Promise<PoolDetailsDto> {
+  public async getPoolsDetails(): Promise<PoolDetailsDto[]> {
     throw new NotImplementedException('Not implemented');
   }
 }

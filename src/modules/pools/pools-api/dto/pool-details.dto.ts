@@ -1,4 +1,4 @@
-import {TokenDetailsDto} from "../../../tokens/dto/token-details.dto";
+import { TokenDetailsDto } from '../../../tokens/dto/token-details.dto';
 
 export class PoolDetailsDto {
   id: string;

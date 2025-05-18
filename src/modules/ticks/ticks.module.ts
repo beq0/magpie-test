@@ -5,9 +5,11 @@ import {TicksApiUniswapService} from "./ticks-api/ticks-api-uniswap.service";
 import {TicksApiEtherService} from "./ticks-api/ticks-api-ether.service";
 import {TicksApiUniswapNormalizer} from "./ticks-api/ticks-api-uniswap.normalizer";
 import {ApiModule} from "../api/api.module";
+import {TypeOrmModule} from "@nestjs/typeorm";
+import {Tick} from "./tick.entity";
 
 @Module({
-  imports: [ApiModule],
+  imports: [ApiModule, TypeOrmModule.forFeature([Tick])],
   providers: [TicksService,
     TicksApiUniswapService,
     TicksApiEtherService,

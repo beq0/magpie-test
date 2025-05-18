@@ -5,16 +5,14 @@ import {PoolDetailsUniswapDto} from "./dto/pool-details-uniswap.dto";
 @Injectable()
 export class PoolsApiUniswapNormalizer {
     public normalizePoolDetails(poolDetails: PoolDetailsUniswapDto[]): PoolDetailsDto[] {
-        return poolDetails.map((pool) => {
-            return {
-                id: pool.id,
-                token0Id: pool.token0.id,
-                token1Id: pool.token1.id,
-                feeTier: pool.feeTier,
-                sqrtPrice: pool.sqrtPrice,
-                liquidity: pool.liquidity,
-                createdAtTimestamp: pool.createdAtTimestamp,
-            };
-        });
+        return poolDetails.map((pool) => ({
+            id: pool.id,
+            token0: pool.token0,
+            token1: pool.token1,
+            feeTier: pool.feeTier,
+            sqrtPrice: pool.sqrtPrice,
+            liquidity: pool.liquidity,
+            createdAtTimestamp: pool.createdAtTimestamp,
+        }));
     }
 }

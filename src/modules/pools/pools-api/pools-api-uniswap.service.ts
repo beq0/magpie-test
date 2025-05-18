@@ -14,40 +14,66 @@ export class PoolsApiUniswapService implements PoolsApiService {
     private readonly poolsApiUniswapNormalizer: PoolsApiUniswapNormalizer,
   ) {}
 
-  public async getPoolsDetails(createdAt?: number): Promise<PoolDetailsDto[]> {
-    const result = await this.apolloClient.query({
-      query: gql`
-      query GetPools($first: Int!, $skip: Int!, $createdAt: BigInt!) {
-        pools(first: $first, skip: $skip, where: { createdAtTimestamp_gt: $createdAt }) {
-          id
-          token0 {
-            symbol
-            id
-            decimals
-            totalSupply
-            derivedETH
-          }
-          token1 {
-            symbol
-            id
-            decimals
-            totalSupply
-            derivedETH
-          }
-          feeTier
-          sqrtPrice
-          liquidity
-          createdAtTimestamp
-        }
-      }
-    `,
-      variables: {
-        first: 10,
-        skip: 0,
-        createdAt: createdAt - 10 || (new Date("1980-01-01").getTime() / 1000).toFixed(),
-      },
-    });
+  public async getPoolsDetails(
+      latestTimestamp: number | null,
+  ): Promise<PoolDetailsDto[]> {
+    let allPools: PoolDetailsDto[] = [];
+    let skip = 0;
+    const first = 10;
+    const createdAt = latestTimestamp
+        ? latestTimestamp - 10
+        : Math.floor(new Date("1980-01-01").getTime() / 1000);
 
-    return this.poolsApiUniswapNormalizer.normalizePoolDetails(result.data['pools']);
+    while (true) {
+      const result = await this.apolloClient.query({
+        query: gql`
+        query GetPools($first: Int!, $skip: Int!, $createdAt: BigInt!) {
+          pools(
+            first: $first,
+            skip: $skip,
+            where: { createdAtTimestamp_gt: $createdAt },
+            orderBy: createdAtTimestamp,
+            orderDirection: asc
+          ) {
+            id
+            token0 {
+              symbol
+              id
+              decimals
+              totalSupply
+              derivedETH
+            }
+            token1 {
+              symbol
+              id
+              decimals
+              totalSupply
+              derivedETH
+            }
+            feeTier
+            sqrtPrice
+            liquidity
+            createdAtTimestamp
+          }
+        }
+      `,
+        variables: {
+          first,
+          skip,
+          createdAt,
+        },
+      });
+      const poolsBatch = this.poolsApiUniswapNormalizer.normalizePoolDetails(result.data['pools']);
+
+      // We will not fetch more than 100 pools per sync task, since ticks might be too many
+      if (!poolsBatch.length || allPools.length >= 10) {
+        break;
+      }
+
+      allPools = allPools.concat(poolsBatch);
+      skip += first;
+    }
+
+    return allPools;
   }
 }

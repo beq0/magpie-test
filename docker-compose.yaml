@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres
+    container_name: magpie-postgres
+    ports:
+      - 5555:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=magpie_db
+
+volumes:
+  postgres_data:

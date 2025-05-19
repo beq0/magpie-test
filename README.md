@@ -1,4 +1,4 @@
-Project setup details:
+#### Project setup details:
 1. create .env configuration file from .env.example
 2. assign your UNISWAP_API_KEY
 3. (optional) if you want to use ether api, assign your ETHER_API_KEY (in my case this was key from MetaMark)
@@ -11,7 +11,7 @@ Project setup details:
 10. Run from terminal: "npm run start:dev" - this starts the server
 
 
-Solution Architecture:
+#### Solution Architecture:
 Since the main idea for this project was to sync pools related data into our db, I decided to split the pools data into separate modules:
 1. pools
 2. tokens

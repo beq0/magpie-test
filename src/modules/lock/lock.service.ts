@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+// In-memory lock service to cover concurrency issues.
+// Service can be remade to utilize any other better locking mechanism (for example Redis)
 @Injectable()
 export class LockService {
   private locks = new Set<string>();

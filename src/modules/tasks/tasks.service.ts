@@ -22,7 +22,7 @@ export class TasksService {
     private readonly lockService: LockService,
   ) {}
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron(CronExpression.EVERY_30_MINUTES)
   async synchronizePools() {
     if (!this.lockService.lock(this.SYNCHRONIZE_POOLS_LOCK)) {
       return;

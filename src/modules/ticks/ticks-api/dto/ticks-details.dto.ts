@@ -3,6 +3,6 @@ export class TickDetailsDto {
   poolId: string;
   liquidityGross: string;
   liquidityNet: string;
-  price0: string;
-  price1: string;
+  price0?: string;
+  price1?: string;
 }

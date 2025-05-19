@@ -20,9 +20,12 @@ export class PoolsApiUniswapService implements PoolsApiService {
     let allPools: PoolDetailsDto[] = [];
     let skip = 0;
     const first = 10;
+    // We will use 2024 as default first date, as the pools from before that have a huge amount of ticks
+    // and it will take too long to fetch them all (for testing purposes). In real scenario, we would have db
+    // setup with all of the pools from the beginning.
     const createdAt = latestTimestamp
       ? latestTimestamp - 10
-      : Math.floor(new Date('1980-01-01').getTime() / 1000);
+      : Math.floor(new Date('2024-01-01').getTime() / 1000);
 
     while (true) {
       const result = await this.apolloClient.query({
@@ -68,7 +71,7 @@ export class PoolsApiUniswapService implements PoolsApiService {
       );
 
       // We will not fetch more than 100 pools per sync task, since ticks might be too many
-      if (!poolsBatch.length || allPools.length >= 10) {
+      if (!poolsBatch.length || allPools.length >= 100) {
         break;
       }
 

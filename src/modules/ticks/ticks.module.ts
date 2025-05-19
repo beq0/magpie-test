@@ -7,6 +7,21 @@ import { TicksApiUniswapNormalizer } from './ticks-api/ticks-api-uniswap.normali
 import { ApiModule } from '../api/api.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tick } from './tick.entity';
+import { ApiSource } from '../api/api-source.enum';
+
+const apiSource = process.env.API_SOURCE;
+let TicksApiImplementation;
+
+if (apiSource === ApiSource.UNISWAP) {
+  TicksApiImplementation = TicksApiUniswapService;
+} else if (apiSource === ApiSource.ETHER) {
+  TicksApiImplementation = TicksApiEtherService;
+} else {
+  console.warn(
+    `Unknown API_SOURCE "${apiSource}", defaulting to Uniswap for Ticks API.`,
+  );
+  TicksApiImplementation = TicksApiUniswapService;
+}
 
 @Module({
   imports: [ApiModule, TypeOrmModule.forFeature([Tick])],
@@ -17,10 +32,7 @@ import { Tick } from './tick.entity';
     TicksApiUniswapNormalizer,
     {
       provide: TICKS_API,
-      useClass:
-        process.env.API_SOURCE === 'uniswap'
-          ? TicksApiUniswapService
-          : TicksApiEtherService,
+      useClass: TicksApiImplementation,
     },
   ],
   exports: [TicksService, TICKS_API],

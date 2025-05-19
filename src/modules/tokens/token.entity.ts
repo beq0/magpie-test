@@ -3,15 +3,15 @@ import { BaseEntity } from '../../shared/base-entity';
 
 @Entity('tokens')
 export class Token extends BaseEntity {
-  @Column()
-  symbol: string;
+  @Column({ nullable: true })
+  symbol?: string;
 
-  @Column()
-  decimals: string;
+  @Column({ nullable: true })
+  decimals?: string;
 
-  @Column()
-  totalSupply: string;
+  @Column({ nullable: true })
+  totalSupply?: string;
 
-  @Column()
-  derivedETH: string;
+  @Column({ nullable: true })
+  derivedETH?: string;
 }

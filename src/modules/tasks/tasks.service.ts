@@ -27,30 +27,33 @@ export class TasksService {
     if (!this.lockService.lock(this.SYNCHRONIZE_POOLS_LOCK)) {
       return;
     }
-    console.log('Synchronizing pools started');
 
-    const latestPoolTimestamp =
-      await this.poolsService.getLatestPoolTimestamp();
-    if (latestPoolTimestamp) {
-      console.log('Latest pool timestamp:', latestPoolTimestamp);
-    } else {
-      console.log('No pools found, fetching from the beginning');
+    try {
+      console.log('Synchronizing pools started');
+
+      const latestPoolTimestamp =
+        await this.poolsService.getLatestPoolTimestamp();
+      if (latestPoolTimestamp) {
+        console.log('Latest pool timestamp:', latestPoolTimestamp);
+      } else {
+        console.log('No pools found, fetching from the beginning');
+      }
+
+      const poolsDetails =
+        await this.poolsApiService.getPoolsDetails(latestPoolTimestamp);
+      await this.poolsService.savePools(poolsDetails);
+
+      const poolIds = poolsDetails.map((pool) => pool.id);
+      const ticks = await this.ticksApiService.getTicksByPoolIds(poolIds);
+      await this.ticksService.saveTicks(ticks);
+
+      const tokens = poolsDetails.flatMap((pool) => {
+        return [pool.token0, pool.token1];
+      });
+      await this.tokensService.saveTokens(tokens);
+    } finally {
+      console.log('Synchronizing pools finished');
+      this.lockService.unLock(this.SYNCHRONIZE_POOLS_LOCK);
     }
-
-    const poolsDetails =
-      await this.poolsApiService.getPoolsDetails(latestPoolTimestamp);
-    await this.poolsService.savePools(poolsDetails);
-
-    const poolIds = poolsDetails.map((pool) => pool.id);
-    const ticks = await this.ticksApiService.getTicksByPoolIds(poolIds);
-    await this.ticksService.saveTicks(ticks);
-
-    const tokens = poolsDetails.flatMap((pool) => {
-      return [pool.token0, pool.token1];
-    });
-    await this.tokensService.saveTokens(tokens);
-
-    console.log('Synchronizing pools finished');
-    this.lockService.unLock(this.SYNCHRONIZE_POOLS_LOCK);
   }
 }

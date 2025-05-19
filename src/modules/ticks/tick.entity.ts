@@ -12,9 +12,9 @@ export class Tick extends BaseEntity {
   @Column()
   liquidityNet: string;
 
-  @Column()
-  price0: string;
+  @Column({ nullable: true })
+  price0?: string;
 
-  @Column()
-  price1: string;
+  @Column({ nullable: true })
+  price1?: string;
 }

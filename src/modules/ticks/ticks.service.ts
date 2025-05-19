@@ -11,7 +11,7 @@ export class TicksService {
     private readonly ticksRepository: Repository<Tick>,
   ) {}
 
-  public async saveTicks(ticks: TickDetailsDto[]): Promise<Tick[]> {
+  public async saveTicks(ticks: TickDetailsDto[]): Promise<void> {
     const tickEntities = this.ticksRepository.create(
       ticks.map((tick) => ({
         id: tick.id,
@@ -23,6 +23,14 @@ export class TicksService {
       })),
     );
 
-    return this.ticksRepository.save(tickEntities);
+    const uniqueTickEntities = tickEntities.filter(
+      (tick, index, self) => index === self.findIndex((t) => t.id === tick.id),
+    );
+
+    await this.ticksRepository.upsert(uniqueTickEntities, {
+      upsertType: 'on-duplicate-key-update',
+      skipUpdateIfNoValuesChanged: true,
+      conflictPaths: ['id'],
+    });
   }
 }

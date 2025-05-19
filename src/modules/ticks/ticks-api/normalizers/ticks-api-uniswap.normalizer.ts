@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TickDetailsUniswapDto } from './dto/ticks-details-uniswap.dto';
-import { TickDetailsDto } from './dto/ticks-details.dto';
+import { TickDetailsUniswapDto } from '../dto/ticks-details-uniswap.dto';
+import { TickDetailsDto } from '../dto/ticks-details.dto';
 
 @Injectable()
 export class TicksApiUniswapNormalizer {

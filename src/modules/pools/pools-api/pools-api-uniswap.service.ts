@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ApolloClient, gql, NormalizedCacheObject } from '@apollo/client/core';
 import { UNISWAP_CLIENT_TOKEN } from '../../api/apollo-client-provider.token';
 import { PoolsApiService } from './pools-api.service.interface';
-import { PoolsApiUniswapNormalizer } from './pools-api-uniswap.normalizer';
+import { PoolsApiUniswapNormalizer } from './normalizers/pools-api-uniswap.normalizer';
 
 @Injectable()
 export class PoolsApiUniswapService implements PoolsApiService {

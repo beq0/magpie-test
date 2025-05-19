@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ApolloClient, gql, NormalizedCacheObject } from '@apollo/client/core';
 import { UNISWAP_CLIENT_TOKEN } from '../../api/apollo-client-provider.token';
 import { TicksApiService } from './ticks-api.service.interface';
-import { TicksApiUniswapNormalizer } from './ticks-api-uniswap.normalizer';
+import { TicksApiUniswapNormalizer } from './normalizers/ticks-api-uniswap.normalizer';
 import { TickDetailsDto } from './dto/ticks-details.dto';
 
 @Injectable()

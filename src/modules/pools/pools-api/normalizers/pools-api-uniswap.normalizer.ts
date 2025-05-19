@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PoolDetailsDto } from './dto/pool-details.dto';
-import { PoolDetailsUniswapDto } from './dto/pool-details-uniswap.dto';
+import { PoolDetailsDto } from '../dto/pool-details.dto';
+import { PoolDetailsUniswapDto } from '../dto/pool-details-uniswap.dto';
 
 @Injectable()
 export class PoolsApiUniswapNormalizer {

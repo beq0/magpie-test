@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PoolDetailsDto } from './dto/pool-details.dto';
-import { PoolDetailsEtherDto } from './dto/pool-details-ether.dto';
-import { EtherApiService } from '../../api/ether-api.service';
+import { PoolDetailsDto } from '../dto/pool-details.dto';
+import { PoolDetailsEtherDto } from '../dto/pool-details-ether.dto';
+import { EtherApiService } from '../../../api/ether-api.service';
 
 @Injectable()
 export class PoolsApiEtherNormalizer {

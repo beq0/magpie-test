@@ -1,4 +1,4 @@
-#### Project setup details:
+### Project setup details:
 1. create .env configuration file from .env.example
 2. assign your UNISWAP_API_KEY
 3. (optional) if you want to use ether api, assign your ETHER_API_KEY (in my case this was key from MetaMark)
@@ -11,16 +11,23 @@
 10. Run from terminal: "npm run start:dev" - this starts the server
 
 
-#### Solution Architecture:
+### Solution Architecture:
 Since the main idea for this project was to sync pools related data into our db, I decided to split the pools data into separate modules:
 1. pools
 2. tokens
 3. ticks
 
+#### api interface and respective solutions for each api
 Even though we wanted integration with more than one API, in this case, Uniswap and Ether API, I wanted to keep the tables and to-store data the same for all APIs.
 I decided to create a common interface for the API clients. This way we can easily add more APIs in the future if needed.
 The API client is responsible for fetching the data from the API and transforming it into a format that can be used by the application.
 
+#### concurrency because of large data
 Since pools data is huge (mostly because of ticks data), I decided to use a simple lock mechanism to prevent multiple 
 cron jobs from running at the same time. This way, we can be sure that the same data is not fetched multiple times, and not inserted into db
 multiple times, which will cause duplication errors.
+
+#### sync process and avoidance of duplicates
+For Uniswap API, During Sync process, I decided to keep track of createdAtTimestamp and fetch only the pools that we haven't fetched yet.
+For Ether API, I decided to keep the block number of the last synced pool and fetch only the pools that are created after that block number.
+I decided not to keep the block number in the DB, as this would not be related to the pools, but to the API client.
